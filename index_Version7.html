@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz día de la primavera Mia</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    .mensaje {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #e17055;
+      background: rgba(255,255,255,0.8);
+      border-radius: 30px;
+      padding: 30px 40px;
+      box-shadow: 0 6px 32px #43c6ac55;
+      text-align: center;
+      z-index: 10;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 10px #fff;
+    }
+    .flores-container {
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .flor {
+      position: absolute;
+      width: 80px;
+      height: 120px;
+      animation: flotar 6s infinite ease-in-out alternate;
+    }
+    @keyframes flotar {
+      0% { transform: translateY(0) scale(1);}
+      100% { transform: translateY(-30px) scale(1.02);}
+    }
+    /* Estilos de la flor SVG */
+    .flor svg {
+      width: 80px;
+      height: 120px;
+      display: block;
+    }
+    /* Animación de aparición */
+    .flores-container .flor {
+      opacity: 0;
+      animation: aparecer 2s forwards, flotar 6s infinite ease-in-out alternate;
+    }
+    @keyframes aparecer {
+      to { opacity: 1;}
+    }
+    /* Botón */
+    .btn {
+      position: absolute;
+      left: 50%;
+      top: 65%;
+      transform: translate(-50%, -50%);
+      padding: 16px 38px;
+      font-size: 1.3rem;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(90deg,#43c6ac 30%,#f8ffae 100%);
+      color: #e17055;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 16px #43c6ac33;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg,#f8ffae 30%,#43c6ac 100%);
+      color: #0984e3;
+    }
+    /* Corazones animados extra (opcional, si quieres más decoración) */
+    .corazon {
+      position: absolute;
+      font-size: 2rem;
+      color: #e17055;
+      animation: subir 5s infinite linear;
+      opacity: 0.7;
+    }
+    @keyframes subir {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-180px) scale(1.3);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mensaje" id="mensaje">
+    Feliz día de la primavera Mia
+  </div>
+  <button class="btn" id="verFlores">Ver flores 🌸</button>
+  <div class="flores-container" id="floresContainer"></div>
+  <script>
+    // Genera varias flores en posiciones aleatorias
+    function crearFlor(x, y, delay) {
+      const flor = document.createElement('div');
+      flor.className = 'flor';
+      flor.style.left = x + 'px';
+      flor.style.top = y + 'px';
+      flor.style.animationDelay = delay + "s";
+      flor.innerHTML = `
+        <svg viewBox="0 0 80 120">
+          <rect x="37" y="65" width="6" height="40" rx="3" fill="#43c6ac"/>
+          <g>
+            <ellipse cx="40" cy="55" rx="18" ry="8" fill="#f8ffae" transform="rotate(0 40 55)"/>
+            <ellipse cx="40" cy="55" rx="18" ry="8" fill="#e17055" transform="rotate(72 40 55)"/>
+            <ellipse cx="40" cy="55" rx="18" ry="8" fill="#fd79a8" transform="rotate(144 40 55)"/>
+            <ellipse cx="40" cy="55" rx="18" ry="8" fill="#fab1a0" transform="rotate(216 40 55)"/>
+            <ellipse cx="40" cy="55" rx="18" ry="8" fill="#55efc4" transform="rotate(288 40 55)"/>
+            <circle cx="40" cy="55" r="10" fill="#ffeaa7"/>
+          </g>
+        </svg>
+      `;
+      return flor;
+    }
+    // Corazones animados
+    function crearCorazon() {
+      const corazon = document.createElement('div');
+      corazon.className = 'corazon';
+      corazon.textContent = '💗';
+      corazon.style.left = (Math.random() * window.innerWidth) + "px";
+      corazon.style.top = (window.innerHeight - 60) + "px";
+      corazon.style.animationDuration = (3 + Math.random()*3) + "s";
+      document.body.appendChild(corazon);
+      setTimeout(() => corazon.remove(), 5000);
+    }
+    // Mostrar flores al hacer clic
+    document.getElementById("verFlores").onclick = function() {
+      const container = document.getElementById("floresContainer");
+      container.innerHTML = "";
+      const ancho = window.innerWidth-90;
+      const alto = window.innerHeight-160;
+      // Crea 14 flores en posiciones aleatorias
+      for(let i=0; i<14; i++){
+        const x = Math.random()*ancho;
+        const y = alto - Math.random()*180;
+        const f = crearFlor(x, y, Math.random()*2);
+        container.appendChild(f);
+      }
+      // Empieza a lanzar corazones animados
+      setInterval(crearCorazon, 1200);
+      // Oculta el botón después de mostrar
+      document.getElementById("verFlores").style.display = "none";
+      // Opcional: Cambia el mensaje
+      document.getElementById("mensaje").textContent = "¡Que tengas un día hermoso de la primavera, Mia! 🌸";
+    };
+  </script>
+</body>
+</html>
